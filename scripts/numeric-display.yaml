@@ -1,0 +1,50 @@
+# 数字格式无效显示专项规则（浮点长尾 3.999999999991 类问题）
+rules:
+  - id: num-format-then-parse-back
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: "格式化结果又转回 Number/parseFloat，显示仍可能出现浮点长尾；格式化应发生在最后一步"
+    pattern-either:
+      - pattern: "Number($X.toFixed(...))"
+      - pattern: "parseFloat($X.toFixed(...))"
+
+  - id: num-format-then-parse-back-2
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: "Number(parseFloat(x).toFixed()) 同样是格式化后回转"
+    pattern: "Number(parseFloat($X).toFixed(...))"
+
+  - id: num-arithmetic-in-template
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: "模板串直接插值浮点运算，可能显示长尾；先 toFixed/统一格式化"
+    pattern-either:
+      - pattern: "`${$A / $B}`"
+      - pattern: "`${$A * $B}`"
+      - pattern: "`...${$A / $B}...`"
+      - pattern: "`...${$A * $B}...`"
+
+  - id: py-fstring-bare-division
+    languages: [python]
+    severity: WARNING
+    message: "f-string 直接插值除法（无 :.Nf 格式说明符），显示浮点长尾风险"
+    pattern-either:
+      - pattern: "f\"...{$X / $Y}...\""
+      - pattern: "f\"...{$X * $Y}...\""
+
+  - id: py-percent-no-format
+    languages: [python]
+    severity: INFO
+    message: "百分比计算直接进字符串无格式化；用 :.1f 或统一 formatter"
+    pattern: "f\"...{$X * 100}...\""
+
+  - id: num-division-in-jsx-tag
+    languages: [javascript, typescript]
+    severity: INFO
+    message: "JSX 直接渲染除法结果，浮点长尾风险；用统一格式化函数"
+    pattern-either:
+      - pattern: "<span>{$A / $B}</span>"
+      - pattern: "<div>{$A / $B}</div>"
+      - pattern: "<td>{$A / $B}</td>"
+      - pattern: "<th>{$A / $B}</th>"
+      - pattern: "<p>{$A / $B}</p>"

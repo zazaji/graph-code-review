@@ -1,0 +1,16 @@
+{
+  "backend": "opencode",
+  "review_model": "",
+  "verify_model": "",
+  "base_url": "",
+  "api_key_env": "LLM_API_KEY",
+  "max_hotspots": 6,
+  "budget_chars": 60000,
+  "_说明": {
+    "backend": "opencode|claude|ollama|openai（OpenAI 兼容 /chat/completions）",
+    "review_model": "空=后端默认。opencode 例: github-copilot/claude-haiku-4.5；研究结论: 小模型常优于大模型且 3.2x 便宜",
+    "verify_model": "空=不核验。跨家族核验更佳（reviewer 用 glm 系则 verifier 用 claude 系）；同模型新上下文核验也有价值",
+    "base_url": "backend=openai 时必填，如 https://api.example.com/v1",
+    "api_key_env": "openai 后端读取的环境变量名（key 不要写进本文件）"
+  }
+}
